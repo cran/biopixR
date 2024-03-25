@@ -1,0 +1,58 @@
+# Next version
+
+# 0.2.4
+- Update Description
+- hotfixed errors in R CMD check (as cran)
+- version for cran submission
+
+# 0.2.3
+- Updates including bugfixes and documentation
+- preparing for CRAN submission
+- R CMD check for Windows, Linux and macOS through CI
+
+# 0.2.2
+- new function - imgPipe:
+	- pipe combining objectDetection, sizeFilter, proximityFilter and resultAnalytics
+	- filter functions individually selectable
+	- option to analyze multiple color channels
+	- includes time stamp log
+- unit test for imgPipe
+- added parallel processing option to resultAnalytics
+- added a zoom/scale tool to interactive_objectDetection
+- change in calculation of estimated_rejected objects in resultAnalytics
+
+# 0.2.1
+- hotfix in resulAnalytics & sizeFilter
+
+# 0.2.0
+- filter functions can be applied individualy (sizeFilter & proximityFilter)
+- objectDetection, sizeFilter and proximityFilter can all be evaluated by resultAnalytics
+- automated calculation of the radius in proximityFilter
+- automated calculation of the limits in sizeFilter
+- CI R-CMD-check for ubuntu
+- changed input format
+
+# 0.1.0
+- passing rhub check on multiple OS 
+
+── R CMD check results ─────────────────────────────────────────────────────────────────────── biopixR 0.0.9 ────
+Duration: 26.1s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+# 0.0.9
+── R CMD check results ─────────────────────────────────────────────────────────────────────── biopixR 0.0.9 ────
+Duration: 27.4s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+# 0.0.0.9200
+- added vignettes
+- added edgeDetection
+- devtools::check() errors fixed
+
+# 0.0.0.9100
+- renamed package and functions
+
+# 0.0.0.9000
+-initial commit 11/13/23
