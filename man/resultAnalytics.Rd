@@ -2,36 +2,48 @@
 % Please edit documentation in R/resultAnalytics.R
 \name{resultAnalytics}
 \alias{resultAnalytics}
-\title{Image Summary}
+\title{Result Calculation and Summary}
 \usage{
-resultAnalytics(unfiltered, coordinates, size, img, parallel = FALSE)
+resultAnalytics(img, coordinates, unfiltered = NULL)
 }
 \arguments{
-\item{unfiltered}{all coordinates from every object before applying filter functions}
+\item{img}{image (import by \code{\link[biopixR]{importImage}})}
 
 \item{coordinates}{all filtered coordinates of the objects (x|y|value data frame)}
 
-\item{size}{size of the objects}
-
-\item{img}{image (import by \code{\link[imager]{load.image}})}
-
-\item{parallel}{if TRUE uses multiple cores (75 \%) to process results}
+\item{unfiltered}{all coordinates from every object before applying filter functions}
 }
 \value{
 list of 2 objects:
-\enumerate{
-\item summary of all the microbeads in the image
-\item detailed information about every single bead
+\itemize{
+\item \code{summary}: A summary of all the objects in the image.
+\item \code{detailed}: Detailed information about every single object.
 }
 }
 \description{
-Extracts all important information of the remaining microbeads. This function
-summarizes the data obtained by previous functions: objectDetection,
-proximityFilter and sizeFilter. Provides information like amount, intensity,
-size and density.
+This function summarizes the data obtained by previous functions:
+\code{\link[biopixR]{objectDetection}}, \code{\link[biopixR]{proximityFilter}}
+or \code{\link[biopixR]{sizeFilter}}. Extracts information like amount,
+intensity, size and density of the objects present in the image.
+}
+\details{
+The \code{\link[biopixR]{resultAnalytics}} function provides comprehensive
+summary of objects detected in an image:
+\enumerate{
+\item \strong{Summary}
+\itemize{
+\item Generates a summary of all detected objects, including the total number of objects, their mean size, size standard deviation, mean intensity, intensity standard deviation, estimated rejected objects, and coverage.
+}
+\item \strong{Detailed Object Information}
+\itemize{
+\item Provides detailed information for each object, including size, mean intensity, intensity standard deviation, and coordinates.
+}
+}
 }
 \examples{
-res_objectDetection <- objectDetection(beads, alpha = 1, sigma = 2)
+res_objectDetection <- objectDetection(beads,
+                                       alpha = 1,
+                                       sigma = 0)
 res_sizeFilter <- sizeFilter(
   res_objectDetection$centers,
   res_objectDetection$coordinates,
@@ -43,11 +55,11 @@ res_proximityFilter <- proximityFilter(
   radius = "auto"
   )
 res_resultAnalytics <- resultAnalytics(
-  unfiltered = res_objectDetection$coordinates,
   coordinates = res_proximityFilter$coordinates,
-  size = res_proximityFilter$size,
+  unfiltered = res_objectDetection$coordinates,
   img = beads
   )
+print(res_resultAnalytics$summary)
 plot(beads)
 with(
   res_objectDetection$centers,
@@ -67,4 +79,7 @@ with(
     pch = 19
     )
   )
+}
+\seealso{
+\code{\link[=objectDetection]{objectDetection()}}, \code{\link[=sizeFilter]{sizeFilter()}}, \code{\link[=proximityFilter]{proximityFilter()}}
 }

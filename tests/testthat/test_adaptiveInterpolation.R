@@ -1,7 +1,6 @@
 library(testthat)
 library(biopixR)
 
-
 test_that("adaptiveInterpolation", {
   # creating example to test
   ## creating artifical image
@@ -35,7 +34,7 @@ test_that("adaptiveInterpolation", {
   alt_x <- list()
   alt_y <- list()
   alt_value <- list()
-  for (g in 1:nrow(df_lab)) {
+  for (g in seq_len(nrow(df_lab))) {
     if (mat_cimg_m[df_lab$x[g], df_lab$y[g], 1, 1] == 1) {
       alt_x[g] <- df_lab$x[g]
       alt_y[g] <- df_lab$y[g]
@@ -49,12 +48,10 @@ test_that("adaptiveInterpolation", {
   )
 
   # actual function
-  overlay <- adaptiveInterpolation(
-    end_points_df,
-    diagonal_edges_df,
-    clean_lab_df,
-    mat_cimg
-  )
+  overlay <- adaptiveInterpolation(end_points_df,
+                                   diagonal_edges_df,
+                                   clean_lab_df,
+                                   mat_cimg)
 
   # begin tests
   expect_equal(nrow(end_points_df), 3)
@@ -62,21 +59,33 @@ test_that("adaptiveInterpolation", {
   expect_equal(nrow(diagonal_edges_df), 1)
 
   expect_equal(dim(overlay$overlay)[1:2], dim(mat_cimg_m)[1:2])
-  expect_equal(which(clean_lab_df$x > (2 - 4) &
-    clean_lab_df$x < (2 + 4) &
-    clean_lab_df$y > (3 - 4) &
-    clean_lab_df$y < (3 + 4)), 3:6)
+  expect_equal(
+    which(
+      clean_lab_df$x > (2 - 4) &
+        clean_lab_df$x < (2 + 4) &
+        clean_lab_df$y > (3 - 4) &
+        clean_lab_df$y < (3 + 4)
+    ),
+    3:6
+  )
   expect_equal(which(clean_lab_df$x == 2 & clean_lab_df$y == 3), 4)
-  expect_equal(which(
-    clean_lab_df[3:6, ]$value !=
-      clean_lab_df[4, ]$value
-  ), 3:4)
-  expect_equal(which(clean_lab_df$x > (2 - 4) &
-    clean_lab_df$x < (2 + 4) &
-    clean_lab_df$y > (3 - 4) &
-    clean_lab_df$y < (3 + 4))[3:4], 5:6)
-  expect_true(isTRUE(nrow(merge(end_points_df[2, ], diagonal_edges_df)) > 0))
-  expect_false(isTRUE(nrow(merge(end_points_df[1, ], diagonal_edges_df)) > 0))
+  expect_equal(which(clean_lab_df[3:6,]$value !=
+                       clean_lab_df[4,]$value), 3:4)
+  expect_equal(
+    which(
+      clean_lab_df$x > (2 - 4) &
+        clean_lab_df$x < (2 + 4) &
+        clean_lab_df$y > (3 - 4) &
+        clean_lab_df$y < (3 + 4)
+    )[3:4],
+    5:6
+  )
+  expect_true(isTRUE(nrow(
+    merge(end_points_df[2,], diagonal_edges_df)
+  ) > 0))
+  expect_false(isTRUE(nrow(
+    merge(end_points_df[1,], diagonal_edges_df)
+  ) > 0))
 
 
   expect_length(overlay, 1)

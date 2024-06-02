@@ -23,7 +23,7 @@ class(beads)
 
 ## ----objectDetection----------------------------------------------------------
 res_objectDetection <-
-  objectDetection(beads, alpha = 1, sigma = 2)
+  objectDetection(beads, method = 'edge', alpha = 1, sigma = 0)
 
 ## ----visualization_1----------------------------------------------------------
 plot(beads)
@@ -41,20 +41,20 @@ with(
 changePixelColor(
   beads,
   res_objectDetection$coordinates,
-  color = "purple",
+  color = factor(res_objectDetection$coordinates$value),
   visualize = TRUE
 )
 
 ## ----visualization_3----------------------------------------------------------
-res_objectDetection$marked_beads |> plot()
+res_objectDetection$marked_objects |> plot()
 
 ## ----error=TRUE---------------------------------------------------------------
-res_sizeFilter <- sizeFilter(
-  centers = res_objectDetection$centers,
-  coordinates = res_objectDetection$coordinates,
-  lowerlimit = "auto",
-  upperlimit = "auto"
-)
+#res_sizeFilter <- sizeFilter(
+#  centers = res_objectDetection$centers,
+#  coordinates = res_objectDetection$coordinates,
+#  lowerlimit = "auto",
+#  upperlimit = "auto"
+#)
 
 ## -----------------------------------------------------------------------------
 res_sizeFilter <- sizeFilter(
@@ -97,11 +97,9 @@ text(
 ## -----------------------------------------------------------------------------
 result <-
   resultAnalytics(
-    unfiltered = res_objectDetection$coordinates,
-    coordinates = res_proximityFilter$coordinates,
-    size = res_proximityFilter$size,
     img = beads,
-    parallel = FALSE
+    coordinates = res_proximityFilter$coordinates,
+    unfiltered = res_objectDetection$coordinates
   )
 result$detailed
 
@@ -111,11 +109,8 @@ result$summary
 ## -----------------------------------------------------------------------------
 result_proximityFilter <-
   resultAnalytics(
-    unfiltered = res_objectDetection$coordinates,
-    coordinates = res_objectDetection$coordinates,
-    size = res_objectDetection$size,
     img = beads,
-    parallel = FALSE
+    coordinates = res_objectDetection$coordinates
   )
 
 result_proximityFilter$detailed
@@ -144,11 +139,9 @@ text(
 ## -----------------------------------------------------------------------------
 result_sizeFilter <-
   resultAnalytics(
-    unfiltered = res_objectDetection$coordinates,
-    coordinates = ind_sizeFilter$coordinates,
-    size = ind_sizeFilter$size,
     img = beads,
-    parallel = FALSE
+    coordinates = ind_sizeFilter$coordinates,
+    unfiltered = res_objectDetection$coordinates
   )
 
 result_sizeFilter$detailed
@@ -177,11 +170,9 @@ text(
 ## -----------------------------------------------------------------------------
 result_proximityFilter <-
   resultAnalytics(
-    unfiltered = res_objectDetection$coordinates,
-    coordinates = ind_proximityFilter$coordinates,
-    size = ind_proximityFilter$size,
     img = beads,
-    parallel = FALSE
+    coordinates = ind_proximityFilter$coordinates,
+    unfiltered = res_objectDetection$coordinates
   )
 
 result_proximityFilter$detailed
@@ -248,7 +239,7 @@ bead_coords <-
 
 # transform binary image to array to modify individual values
 thresh_array <- as.array(neg_thresh_m)
-for (i in 1:nrow(bead_coords$coordinates)) {
+for (i in seq_len(nrow(bead_coords$coordinates))) {
   thresh_array[
     bead_coords$coordinates[i, 1],
     bead_coords$coordinates[i, 2], 1, 1
@@ -331,7 +322,7 @@ x <- list()
 y <- list()
 value <- list()
 
-for (g in 1:nrow(df_lab_part)) {
+for (g in seq_len(nrow(df_lab_part))) {
   # droplets_array <- as.array(droplets)
   if (closed_gaps[df_lab_part$x[g], df_lab_part$y[g], 1, 1] == 0) {
     x[g] <- df_lab_part$x[g]
@@ -354,6 +345,7 @@ changePixelColor(closed_gaps,
 )
 
 ## ----fig.align='center', out.width="100%"-------------------------------------
+library(data.table)
 # summarizing data frame by cluster (value)
 DT_droplet <- data.table(clean_lab_df)
 
@@ -372,7 +364,7 @@ text(
 ## -----------------------------------------------------------------------------
 # checking in which partition the center coordinates of the microbeads are present
 bead_partition <- list()
-for (c in 1:nrow(bead_coords$centers)) {
+for (c in seq_len(nrow(bead_coords$centers))) {
   partition_pos <- which(
     clean_lab_df$x == round(bead_coords$centers$mx[c]) &
       clean_lab_df$y == round(bead_coords$centers$my[c])

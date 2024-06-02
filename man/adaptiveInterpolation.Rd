@@ -2,68 +2,73 @@
 % Please edit documentation in R/adaptiveInterpolation.R
 \name{adaptiveInterpolation}
 \alias{adaptiveInterpolation}
-\title{Connects LineEnd with the nearest labeled region}
+\title{Connects Line Ends with the nearest labeled region}
 \usage{
 adaptiveInterpolation(
   end_points_df,
   diagonal_edges_df,
   clean_lab_df,
-  lineends_cimg,
+  img,
   radius = 5
 )
 }
 \arguments{
-\item{end_points_df}{data frame with the coordinates of all line ends. can
-be obtained with \code{\link[magick]{image_morphology}}.}
+\item{end_points_df}{\code{data.frame} with the coordinates of all line ends
+(can be obtained by using \code{\link[magick]{image_morphology}})}
 
-\item{diagonal_edges_df}{data frame with coordinates of diagonal line ends.
-can also be obtained by \code{\link[magick]{image_morphology}}.}
+\item{diagonal_edges_df}{\code{data.frame} with coordinates of diagonal line ends
+(can also be obtained by using \code{\link[magick]{image_morphology}})}
 
-\item{clean_lab_df}{data of type 'data.frame', containing the x, y and value
-information of every labeled region in an image. (only the edges should be
+\item{clean_lab_df}{data of type \code{data.frame}, containing the x, y and value
+information of every labeled region in an image (only the edges should be
 labeled)}
 
-\item{lineends_cimg}{image with dimensions of the image with discontinuous
-edges. just for giving the dimensions of the output matrix.}
+\item{img}{image providing the dimensions of the output matrix
+(import by \code{\link[biopixR]{importImage}})}
 
 \item{radius}{maximal radius that should be scanned for another cluster}
 }
 \value{
-binary matrix that can be applied as an overlay, for example with
+Binary matrix that can be applied as an overlay, for example with
 \code{\link[imager]{imager.combine}} to fill the gaps between line ends.
 }
 \description{
-Function scans an increasing radius around a line end and connects it with
-the nearest labeled region.
+The function scans an increasing radius around a line end and connects it
+with the nearest labeled region.
 }
 \details{
-This function is intended to be part of the fillLineGaps function, which
-does the thresholding and line end detection preprocessing. The
-adaptiveInterpolation creates a matrix in the dimensions of the original
-image. At the beginning there are only background values (0) = black image.
-The function then searches for LineEnds and looks for a given radius around
-this line end for the nearest labeled region. The own cluster of the line
-end is of course not considered as nearest neighbor.If another cluster is
-found, the interpolatePixels function is used to connect the line end to the
-found cluster. This means that specified pixels of the matrix are
-transformed to a foreground value of (1). The diagonal line ends get a
-special treatment, because for the labeling function,7 the diagonal pixels
-are always treated as a separate cluster, which makes them difficult to
-reconnect. To deal with this problem, diagonal line ends ignore not only
-their cluster, but also the cluster of the direct neighbor. Thereafter,
-the same procedure as before is repeated, where pixel values are changed
-according to the interpolatePixel function.
+This function is designed to be part of the
+\code{\link[biopixR]{fillLineGaps}} function, which performs the thresholding
+and line end detection preprocessing. The
+\code{\link[biopixR]{adaptiveInterpolation}} generates a matrix with
+dimensions matching those of the original image. Initially, the matrix
+contains only background values (0) corresponding to a black image. The
+function then searches for line ends and identifies the nearest labeled
+region within a given radius of the line end. It should be noted that the
+cluster of the line end in question is not considered a nearest neighbor. In
+the event that another cluster is identified, the
+\code{\link[biopixR]{interpolatePixels}} function is employed to connect the
+line end to the aforementioned cluster. This entails transforming the
+specified pixels of the matrix to a foreground value of (1).
+It is important to highlight that diagonal line ends receive a special
+treatment, as they are always treated as a separate cluster by the labeling
+function. This makes it challenging to reconnect them. To address this issue,
+diagonal line ends not only ignore their own cluster but also that of their
+direct neighbor. Thereafter, the same procedure is repeated, with pixel
+values being changed according to the
+\code{\link[biopixR]{interpolatePixels}} function.
 }
 \examples{
-# creating an artificial binary image
+# Creating an artificial binary image
 mat <- matrix(0, 8, 8)
 mat[3, 1:2] <- 1
 mat[4, 3] <- 1
 mat[7:8, 3] <- 1
 mat[5, 6:8] <- 1
 mat_cimg <- as.cimg(mat)
+plot(mat_cimg)
 
-# preprocessing / LineEnd detection / labeling  (done in fillLineGaps)
+# Preprocessing / LineEnd detection / labeling (done in fillLineGaps())
 mat_cimg_m <- mirror(mat_cimg, axis = "x")
 mat_magick <- cimg2magick(mat_cimg)
 lineends <- image_morphology(mat_magick, "HitAndMiss", "LineEnds")
@@ -81,7 +86,7 @@ df_lab <- as.data.frame(lab) |> subset(value > 0)
 alt_x <- list()
 alt_y <- list()
 alt_value <- list()
-for (g in 1:nrow(df_lab)) {
+for (g in seq_len(nrow(df_lab))) {
   if (mat_cimg_m[df_lab$x[g], df_lab$y[g], 1, 1] == 1) {
     alt_x[g] <- df_lab$x[g]
     alt_y[g] <- df_lab$y[g]
@@ -94,7 +99,7 @@ clean_lab_df <- data.frame(
   value = unlist(alt_value)
 )
 
-# actual function
+# Actual function
 overlay <- adaptiveInterpolation(
   end_points_df,
   diagonal_edges_df,

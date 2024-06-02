@@ -1,9 +1,9 @@
 Package: biopixR
 Title: Extracting Insights from Biological Images
-Version: 0.2.4
+Version: 1.0.0
 Authors@R: 
     c(person("Tim", "Brauckhoff", 
-    email = "Tim.Brauckhoff@b-tu.de", 
+    email = "brauctile@disroot.org", 
     role = c("aut", "cre"),
     comment = c(ORCID = "0009-0002-0142-7017")),
     person("Stefan", "Roediger",
@@ -19,8 +19,10 @@ Description: Combines the 'magick' and 'imager' packages to streamline image ana
 License: LGPL (>= 3)
 VignetteBuilder: knitr
 BuildVignettes: true
-Depends: R (>= 4.2.0), data.table, imager, magick, tcltk, foreach
-Suggests: knitr, rmarkdown, doParallel, kohonen
+Depends: R (>= 4.2.0), imager, magick, tcltk
+Imports: data.table, cluster
+Suggests: knitr, rmarkdown, doParallel, kohonen, imagerExtra, GPareto,
+        foreach
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 LazyData: true
@@ -29,10 +31,10 @@ NeedsCompilation: no
 Language: en-US
 URL: https://github.com/Brauckhoff/biopixR
 BugReports: https://github.com/Brauckhoff/biopixR/issues
-Packaged: 2024-03-24 08:25:58 UTC; brauctim
+Packaged: 2024-06-01 15:42:21 UTC; brauctim
 Author: Tim Brauckhoff [aut, cre] (<https://orcid.org/0009-0002-0142-7017>),
   Stefan Roediger [ctb] (<https://orcid.org/0000-0002-1441-6512>),
   Coline Kieffer [ctb]
-Maintainer: Tim Brauckhoff <Tim.Brauckhoff@b-tu.de>
+Maintainer: Tim Brauckhoff <brauctile@disroot.org>
 Repository: CRAN
-Date/Publication: 2024-03-25 19:10:09 UTC
+Date/Publication: 2024-06-02 23:20:14 UTC

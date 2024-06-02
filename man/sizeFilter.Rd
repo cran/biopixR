@@ -7,30 +7,43 @@
 sizeFilter(centers, coordinates, lowerlimit = "auto", upperlimit = "auto")
 }
 \arguments{
-\item{centers}{center coordinates of objects (needs to include 'value'
-representing the center number)}
+\item{centers}{center coordinates of objects (value|mx|my|size data frame)}
 
 \item{coordinates}{all coordinates of the objects (x|y|value data frame)}
 
-\item{lowerlimit}{smallest accepted object size (when 'auto' both limits are
-calculated by using the mean and the standard deviation)}
+\item{lowerlimit}{smallest accepted object size (numeric / 'auto')}
 
-\item{upperlimit}{highest accepted object size}
+\item{upperlimit}{highest accepted object size (numeric / 'auto')}
 }
 \value{
-list of 3 objects:
-\enumerate{
-\item remaining centers after discarding according to size
-\item remaining coordinates after discarding according to size
-\item size of remaining objects
+list of 2 objects:
+\itemize{
+\item Remaining centers after discarding according to size.
+\item Remaining coordinates after discarding according to size.
 }
 }
 \description{
-Calculates the size of the objects in an image and discards objects based
-on a lower and an upper size limit. (Input can be obtained by objectDetection function)
+Takes the size of the objects in an image and discards objects based
+on a lower and an upper size limit.
+(Input can be obtained by \code{\link[biopixR]{objectDetection}} function)
+}
+\details{
+The \code{\link[biopixR]{sizeFilter}} function is designed to filter
+detected objects based on their size, either through automated detection or
+user-defined limits. The automated detection of size limits uses the 1.5*IQR
+method to identify and remove outliers. This approach is most effective when
+dealing with a large number of objects, (typically more than 50), and when
+the sizes of the objects are relatively uniform. For smaller samples or when
+the sizes of the objects vary significantly, the automated detection may not
+be as accurate, and manual limit setting is recommended.
 }
 \examples{
-res_objectDetection <- objectDetection(beads, alpha = 1, sigma = 2)
+res_objectDetection <- objectDetection(
+  beads,
+  method = 'edge',
+  alpha = 1,
+  sigma = 0
+  )
 res_sizeFilter <- sizeFilter(
   centers = res_objectDetection$centers,
   coordinates = res_objectDetection$coordinates,

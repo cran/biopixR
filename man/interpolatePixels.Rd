@@ -7,24 +7,29 @@
 interpolatePixels(row1, col1, row2, col2)
 }
 \arguments{
-\item{row1}{first row: together with col1 coordinate for the first point}
+\item{row1}{row index for the first point}
 
-\item{col1}{first column: together with row1 coordinate for the first point}
+\item{col1}{column index for the first point}
 
-\item{row2}{second row: together with col2 coordinate for the second point}
+\item{row2}{row index for the second point}
 
-\item{col2}{second column: together with row2 coordinate for the second point}
+\item{col2}{column index for the second point}
 }
 \value{
-matrix containing the coordinates to connect the two input points
+Matrix containing the coordinates to connect the two input points.
 }
 \description{
 Connects two points in a matrix, array, or an image.
 }
 \examples{
+# Simulate two points in a matrix
 test <- matrix(0, 4, 4)
 test[1, 1] <- 1
 test[3, 4] <- 1
+as.cimg(test) |> plot()
+
+# Connect them with each other
 link <- interpolatePixels(1, 1, 3, 4)
 test[link] <- 1
+as.cimg(test) |> plot()
 }

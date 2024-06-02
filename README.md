@@ -1,4 +1,5 @@
   <!-- badges: start -->
+  [![CRAN Version](https://www.r-pkg.org/badges/version/biopixR)](https://cran.r-project.org/package=biopixR)
   [![R-CMD-check](https://github.com/Brauckhoff/biopixR/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/Brauckhoff/biopixR/actions/workflows/R-CMD-check.yml)
   <!-- badges: end -->
 
@@ -16,12 +17,20 @@ The rise of high-resolution imaging technologies has led to an exponential incre
  - *Image Preprocessing*: Implementing techniques to fill and reconnect discontinuous lines and edges. Discard coagulated duplets, multiplets, and beads that are too close together as they may excite each other and produce a false positive signal.
  - *Segmentation and Feature Extraction*: Applying algorithms to accurately identify and segment sperical objects (e.g, microparticles). Extracting relevant features such as quantity, size, and intensity for comprehensive characterization. 
  - *Visualization*: Implementing interactive tools with [Tcl/Tk](https://www.tcl-lang.org/) via the tcltk package for the selection of thresholds and smoothing factors. Generating images to control the appropriate functioning of algorithms, for example the reconnection of lines.
- - *Automatization*: Combining algorithms for high-throughput analysis of image data.
+ - *Automatization*: Combining algorithms for medium-throughput analysis of image data.
 
 This project aims to meet the immediate need for effective bead microparticle analysis and contribute to the broader field of image processing methodologies in the R programming environment. By providing a comprehensive and adaptable framework, the work empowers researchers and practitioners to extract meaningful insights from image data, thus enhancing our understanding of bead microparticles and their diverse applications.
 
 
 ## Installation
+
+Now available on CRAN so try:
+
+```{r}
+install.packages("biopixR")
+```
+
+or try the latest version of biopixR:
 
 ```{r}
 install.package("devtools")
@@ -117,10 +126,9 @@ In conclusion, obtaining meaningful information from the filtered dataset is ess
 ```{r}
 result <-
   resultAnalytics(
-    unfiltered = res_objectDetection$coordinates,
+    img = beads,
     coordinates = res_proximityFilter$coordinates,
-    size = res_proximityFilter$size,
-    img = beads
+    unfiltered = res_objectDetection$coordinates
   )
 
 result$detailed
@@ -225,6 +233,7 @@ The following functions are inherited functionality from other packages and were
 - `edgeDetection` based on `cannyEdges` from the imager package (https://cran.r-project.org/package=imager)
 - `interactive_objectDetection` based on `interactive_blur` from the magickGUI package (https://cran.r-project.org/package=magickGUI)
 - `changePixelColor` based on `changePixelColor` from the countcolors package (https://cran.r-project.org/package=countcolors)
+- `haralickCluster` partially based on `GLCMFeatures` from the radiomics package (https://cran.r-project.org/package=radiomics)
 
 
 # Related Research
