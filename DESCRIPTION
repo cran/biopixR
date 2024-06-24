@@ -1,6 +1,6 @@
 Package: biopixR
 Title: Extracting Insights from Biological Images
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     c(person("Tim", "Brauckhoff", 
     email = "brauctile@disroot.org", 
@@ -31,10 +31,10 @@ NeedsCompilation: no
 Language: en-US
 URL: https://github.com/Brauckhoff/biopixR
 BugReports: https://github.com/Brauckhoff/biopixR/issues
-Packaged: 2024-06-01 15:42:21 UTC; brauctim
+Packaged: 2024-06-24 16:45:52 UTC; brauctim
 Author: Tim Brauckhoff [aut, cre] (<https://orcid.org/0009-0002-0142-7017>),
   Stefan Roediger [ctb] (<https://orcid.org/0000-0002-1441-6512>),
   Coline Kieffer [ctb]
 Maintainer: Tim Brauckhoff <brauctile@disroot.org>
 Repository: CRAN
-Date/Publication: 2024-06-02 23:20:14 UTC
+Date/Publication: 2024-06-24 17:40:02 UTC
